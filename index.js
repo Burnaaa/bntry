@@ -44,6 +44,10 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "template", "index.html"));
 });
 
+app.get("/home", (req, res) => {
+  res.send('home indeed!')
+});
+
 // app.get("/:page", (req, res) => {
 //   const page = req.params.page;
 //   res.sendFile(__dirname + `/template/${page}.html`);
