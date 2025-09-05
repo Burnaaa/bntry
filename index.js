@@ -3,6 +3,7 @@ const multer = require("multer");
 const formData = require("form-data");
 const Mailgun = require("mailgun.js");
 const nodemailer = require("nodemailer");
+const path = require('path')
 
 const app = express();
 const port = 8000; // Change this to your desired port
@@ -40,6 +41,10 @@ app.use(upload.none());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
+
+app.get('/home', (req, res)=>{
+  res.send('home reached')
+})
 
 app.get("/", (req, res) => {
   res.sendFile(__dirname + `/template/index.html`);
